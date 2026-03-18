@@ -1,3 +1,0 @@
-C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/build/CMakeFiles/face_detection.dir
-C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/build/CMakeFiles/ALL_BUILD.dir
-C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/build/CMakeFiles/ZERO_CHECK.dir
