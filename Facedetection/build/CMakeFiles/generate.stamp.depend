@@ -1,0 +1,74 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDependentOption.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindDependencyMacro.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckCXXSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindTIFF.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/FindThreads.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CMakeCXXLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CMakeCommonLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Linker/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Linker/MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Linker/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows-Initialize.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-4.3/Modules/SelectLibraryConfigurations.cmake
+C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/CMakeLists.txt
+C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/build/CMakeFiles/4.3.0-rc3/CMakeCXXCompiler.cmake
+C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/build/CMakeFiles/4.3.0-rc3/CMakeRCCompiler.cmake
+C:/abhi/German_UDS/Quarter2/Coding_Camp_II/Project/Facedetection/build/CMakeFiles/4.3.0-rc3/CMakeSystem.cmake
+C:/vcpkg/installed/x64-windows/share/absl/abslConfig.cmake
+C:/vcpkg/installed/x64-windows/share/absl/abslConfigVersion.cmake
+C:/vcpkg/installed/x64-windows/share/absl/abslTargets-debug.cmake
+C:/vcpkg/installed/x64-windows/share/absl/abslTargets-release.cmake
+C:/vcpkg/installed/x64-windows/share/absl/abslTargets.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/BuildFlatBuffers.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/FlatBuffersTargets-debug.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/FlatBuffersTargets-release.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/FlatBuffersTargets.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/FlatcTargets-release.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/FlatcTargets.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/flatbuffers-config-version.cmake
+C:/vcpkg/installed/x64-windows/share/flatbuffers/flatbuffers-config.cmake
+C:/vcpkg/installed/x64-windows/share/opencv4/OpenCVConfig-version.cmake
+C:/vcpkg/installed/x64-windows/share/opencv4/OpenCVConfig.cmake
+C:/vcpkg/installed/x64-windows/share/opencv4/OpenCVModules-debug.cmake
+C:/vcpkg/installed/x64-windows/share/opencv4/OpenCVModules-release.cmake
+C:/vcpkg/installed/x64-windows/share/opencv4/OpenCVModules.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-config-version.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-config.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-generate.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-module.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-options.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-targets-debug.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-targets-release.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/protobuf-targets.cmake
+C:/vcpkg/installed/x64-windows/share/protobuf/vcpkg-cmake-wrapper.cmake
+C:/vcpkg/installed/x64-windows/share/quirc/quirc-config-debug.cmake
+C:/vcpkg/installed/x64-windows/share/quirc/quirc-config-release.cmake
+C:/vcpkg/installed/x64-windows/share/quirc/quirc-config.cmake
+C:/vcpkg/installed/x64-windows/share/tiff/vcpkg-cmake-wrapper.cmake
+C:/vcpkg/installed/x64-windows/share/utf8_range/utf8_range-config.cmake
+C:/vcpkg/installed/x64-windows/share/utf8_range/utf8_range-targets-debug.cmake
+C:/vcpkg/installed/x64-windows/share/utf8_range/utf8_range-targets-release.cmake
+C:/vcpkg/installed/x64-windows/share/utf8_range/utf8_range-targets.cmake
+C:/vcpkg/scripts/buildsystems/vcpkg.cmake
