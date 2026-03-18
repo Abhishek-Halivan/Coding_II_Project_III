@@ -1,56 +1,78 @@
-# Simple C++ Face Detection
+# Real-time Face Detection Application
 
-This is a minimal C++ face detection app using OpenCV and your webcam.
+A modern C++ face detection system that captures video from your webcam and detects faces in real-time using a hybrid approach combining classical and deep learning methods. Built with OpenCV and optimized for smooth, responsive performance.
 
-Detection quality improvements in this version:
+## Key Features
 
-- CLAHE-based contrast enhancement for better low-light and high-contrast scenes
-- Multi-scale detection on a resized frame for steadier real-time performance
-- Edge-density filtering to reduce false positives
-- Temporal smoothing of face boxes to reduce jitter
-- Edge overlay on detected faces, plus optional edge preview window
-- **Hybrid detector**: Haar cascade combined with DNN face detector (ResNet-based)
-- **Confidence fusion**: Detection candidates from both methods are merged by IoU overlap
-- Adaptive edge-based validation: stricter filtering for lower-confidence candidates
+### Advanced Detection Pipeline
+- **Hybrid Detection**: Combines Haar cascade classifiers (fast, traditional) with DNN-based detectors (accurate, modern ResNet)
+- **Intelligent Fusion**: Merges detections from both methods using Intersection-over-Union (IoU) overlap for robust results
+- **Confidence-aware Filtering**: Applies stricter validation to lower-confidence detections to reduce false positives
 
-## Requirements
+### Visual Enhancements
+- **CLAHE Contrast Enhancement**: Adapts image contrast locally for improved detection in challenging lighting (low-light, bright, high-contrast scenes)
+- **Edge-based Validation**: Uses edge density analysis to filter detections and reject non-face regions
+- **Real-time Edge Overlay**: Visualizes detected edges on faces; optional edge preview window for monitoring detector behavior
 
-- C++17 compiler
-- CMake (3.15+)
-- OpenCV installed (with `objdetect`, `highgui`, and `videoio` modules)
-- Haar cascade file: `haarcascade_frontalface_default.xml`
+### Stability & Smoothness
+- **Temporal Smoothing**: Reduces flickering and jitter by smoothing detection box positions across frames
+- **Multi-scale Detection**: Processes downsampled frames for more stable real-time detection without sacrificing accuracy
+- **History-aware Tracking**: Tracks face positions across frames to maintain consistent bounding boxes
 
-## Build (Windows, PowerShell)
+## System Requirements
+
+- **Compiler**: C++17 compatible (MSVC, GCC, Clang)
+- **Build Tool**: CMake 3.15 or newer
+- **Dependencies**: OpenCV 4.0+ with core modules:
+  - `objdetect` (Haar cascade and feature matching)
+  - `highgui` (window display and event handling)
+  - `videoio` (webcam access)
+  - `dnn` (deep neural network inference)
+- **Runtime**: Haar cascade XML file (`haarcascade_frontalface_default.xml`)
+
+## Build Instructions
+
+### Option 1: Automated Quick Start (Windows)
+
+Simplest option — the provided script handles everything:
+
+```powershell
+.\run.ps1
+```
+
+This will build if needed and run immediately with auto-detected cascade file.
+
+### Option 2: Manual Build (Windows)
+
+For more control, configure and build manually:
 
 ```powershell
 cmake -S . -B build
 cmake --build build --config Release
 ```
 
-## If CMake Cannot Find OpenCV
+## Configuring OpenCV
 
-If you see an error about missing `OpenCVConfig.cmake`, use one of these setups.
+If CMake reports missing `OpenCVConfig.cmake`, choose one of the setups below.
 
-### Option A: Install OpenCV with vcpkg (recommended)
+### Option A: vcpkg Installation (Recommended)
 
 ```powershell
+# Clone vcpkg (one-time setup)
 git clone https://github.com/microsoft/vcpkg "$env:USERPROFILE\vcpkg"
 & "$env:USERPROFILE\vcpkg\bootstrap-vcpkg.bat"
+
+# Install OpenCV
 & "$env:USERPROFILE\vcpkg\vcpkg.exe" install opencv4:x64-windows
 
+# Build project with vcpkg toolchain
 cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE="$env:USERPROFILE\vcpkg\scripts\buildsystems\vcpkg.cmake"
 cmake --build build --config Release
 ```
 
+### Option B: Use Existing OpenCV Installation
 
-### Option B: Use an existing OpenCV install
-
-Set `OpenCV_DIR` to the folder that contains `OpenCVConfig.cmake`.
-Typical path example:
-
-- `C:\opencv\build`
-
-Then configure/build:
+If you already have OpenCV installed, point CMake to the directory containing `OpenCVConfig.cmake` (typically `C:\opencv\build`):
 
 ```powershell
 $env:OpenCV_DIR = "C:\opencv\build"
@@ -58,16 +80,16 @@ cmake -S . -B build -DOpenCV_DIR="$env:OpenCV_DIR"
 cmake --build build --config Release
 ```
 
-### Option C: Configure with CMAKE_PREFIX_PATH
+### Option C: Manual CMAKE_PREFIX_PATH
 
-If you already installed OpenCV and know its install prefix, you can pass it with `CMAKE_PREFIX_PATH`.
+Alternatively, use `CMAKE_PREFIX_PATH` to specify the OpenCV install prefix:
 
 ```powershell
 cmake -S . -B build -DCMAKE_PREFIX_PATH="C:\opencv\build"
 cmake --build build --config Release
 ```
 
-You can also set it as an environment variable:
+Or set it as a persistent environment variable:
 
 ```powershell
 $env:CMAKE_PREFIX_PATH = "C:\opencv\build"
@@ -75,42 +97,40 @@ cmake -S . -B build
 cmake --build build --config Release
 ```
 
-## Run
+## Running the Application
 
-Option 1: pass cascade path as argument.
+### Using the Convenience Script (Easiest)
+
+```powershell
+.\run.ps1
+```
+
+Automatically builds, finds the cascade file, and launches. Optional parameters:
+
+```powershell
+# Specify custom cascade file
+.\run.ps1 -CascadePath "C:\path\to\haarcascade_frontalface_default.xml"
+
+# Use Debug build instead of Release
+.\run.ps1 -BuildType Debug
+```
+
+### Running Directly
+
+**Method 1**: Pass cascade path as command-line argument
 
 ```powershell
 .\build\Release\face_detection.exe C:\path\to\haarcascade_frontalface_default.xml
 ```
 
-Option 2: set environment variable and run.
+**Method 2**: Set environment variable and run
 
 ```powershell
 $env:OPENCV_FACE_CASCADE = "C:\path\to\haarcascade_frontalface_default.xml"
 .\build\Release\face_detection.exe
 ```
 
-Controls:
+### Controls
 
-- `q` or `Esc` to quit
-- `e` to toggle edge preview window
-
-## Quick Start Script (Windows)
-
-Use the root script to build (if needed) and run in one command:
-
-```powershell
-.\run.ps1
-```
-
-Optional: pass an explicit cascade path.
-
-```powershell
-.\run.ps1 -CascadePath "C:\path\to\haarcascade_frontalface_default.xml"
-```
-
-Optional: choose build type (`Release` default).
-
-```powershell
-.\run.ps1 -BuildType Debug
-```
+- **q** or **Esc**: Quit application
+- **e**: Toggle edge detection preview window (useful for debugging detection quality)

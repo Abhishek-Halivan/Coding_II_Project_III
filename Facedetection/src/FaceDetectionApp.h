@@ -7,23 +7,20 @@
 #include <vector>
 #include <string>
 
-/**
- * Main face detection application orchestrating all detection and visualization components
- */
+// Main application class that orchestrates the complete face detection pipeline.
+// Manages initialization, video capture, detection fusion, temporal smoothing, and real-time visualization.
+// Coordinates between Haar cascade detector, DNN detector, edge analysis, and frame rendering.
 class FaceDetectionApp {
 public:
     FaceDetectionApp();
 
-    /**
-     * Initialize the application
-     * @param cascadePath Path to Haar cascade file (optional, checks env var if empty)
-     * @return true if initialization successful, false otherwise
-     */
+    // Initialize the application: load cascade files, set up detectors, and configure video capture.
+    // If cascadePath is empty, checks the OPENCV_FACE_CASCADE environment variable.
+    // Returns true on success, false if cascade file not found or detectors fail to initialize.
     bool initialize(const std::string& cascadePath = "");
 
-    /**
-     * Run the main detection loop
-     */
+    // Main event loop: continuously capture frames from webcam, run detections, apply temporal smoothing,
+    // and render results. Processes keyboard input (q/Esc to quit, e to toggle edge preview).
     void run();
 
 private:
@@ -44,44 +41,36 @@ private:
     bool showEdgeWindow = true;
     bool edgeWindowCreated = false;
 
-    /**
-     * Process a single frame
-     * @param frame Input BGR frame from video capture
-     * @param grayFrame Grayscale/enhanced frame for detection
-     * @param edges Edge map
-     * @return Detected and smoothed face rectangles
-     */
+    // Process a single video frame through the complete detection pipeline:
+    // 1. Run both Haar and DNN detectors on enhanced grayscale frame
+    // 2. Fuse detections using IoU-based confidence scoring
+    // 3. Filter fusion results using edge density analysis
+    // 4. Apply temporal smoothing to reduce jitter
+    // Returns final list of face bounding boxes with improved stability.
     std::vector<cv::Rect> processFrame(const cv::Mat& frame, const cv::Mat& grayFrame, const cv::Mat& edges);
 
-    /**
-     * Filter detections based on edge density
-     * @param fusedDetections Detections from fusion
-     * @param edges Edge map
-     * @return Filtered face rectangles
-     */
+    // Filter detections by analyzing edge density within bounding boxes.
+    // Regions with too few edges (below min_edge_ratio) or too many edges (above max_edge_ratio)
+    // are rejected as non-face detections. Applies stricter edge constraints to low-confidence detections.
+    // Returns filtered rectangles that pass edge validation.
     std::vector<cv::Rect> filterByEdgeDensity(
         const std::vector<std::pair<cv::Rect, double>>& fusedDetections,
         const cv::Mat& edges
     );
 
-    /**
-     * Apply temporal smoothing to reduce jitter
-     * @param faces Current frame detections
-     * @return Temporally smoothed detections
-     */
+    // Smooth detection positions across frames to reduce flickering and jitter.
+    // Matches current detections to previous frame faces using spatial proximity.
+    // Applies weighted averaging (temporal_alpha controls weight of history vs. new detection).
+    // Unmatched faces are added directly; unmatched previous faces fade out.
     std::vector<cv::Rect> applyTemporalSmoothing(const std::vector<cv::Rect>& faces);
 
-    /**
-     * Draw detections on frame
-     * @param frame Frame to draw on
-     * @param faces Detected faces
-     * @param edges Edge map for overlay
-     */
+    // Render detected faces onto the output frame with visual feedback.
+    // Draws green bounding boxes around faces and overlays detected edges in cyan.
+    // Updates frame in-place; used for real-time display to user.
     void drawDetections(cv::Mat& frame, const std::vector<cv::Rect>& faces, const cv::Mat& edges);
 
-    /**
-     * Handle keyboard input
-     * @return false if user wants to quit, true otherwise
-     */
+    // Process keyboard input from OpenCV window.
+    // Returns false if user pressed q or Esc (quit signal), true otherwise.
+    // 'e' key toggles edge preview window visibility.
     bool handleInput();
 };

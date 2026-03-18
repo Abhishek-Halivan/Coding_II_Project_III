@@ -4,31 +4,29 @@
 #include <vector>
 #include <utility>
 
-/**
- * Utilities for computing detection metrics and merging detections from multiple detectors
- */
+// Utilities for combining detections from multiple detectors and computing detection metrics.
+// Fuses Haar cascade and DNN detections to achieve higher accuracy and lower false positive rate.
+// Implements temporal smoothing and IoU-based detection matching.
 class DetectionFusion {
 public:
-    /**
-     * Compute Intersection over Union (IoU) between two rectangles
-     */
+    // Compute Intersection over Union (IoU) between two rectangles.
+    // Formula: IoU = Intersection Area / Union Area
+    // Returns 0.0 for non-overlapping rectangles, 1.0 for identical rectangles.
+    // Used to determine if two detectors found the same face (typically threshold ~0.3).
     static double computeIoU(const cv::Rect& a, const cv::Rect& b);
 
-    /**
-     * Temporally smooth a rectangle based on previous detection
-     * @param prev Previous rectangle position
-     * @param curr Current rectangle position
-     * @param alpha Smoothing factor (higher = more weight to previous)
-     * @return Smoothed rectangle
-     */
+    // Temporally smooth a rectangle position using weighted averaging.
+    // alpha: blending factor (0.0 = full current, 1.0 = full previous).
+    // Reduces sudden jumps in bounding box position between frames.
+    // Returns smoothed rectangle at interpolated position.
     static cv::Rect smoothRect(const cv::Rect& prev, const cv::Rect& curr, double alpha);
 
-    /**
-     * Merge detections from Haar cascade and DNN detector
-     * @param haarFaces Faces detected by Haar cascade
-     * @param dnnFaces Faces detected by DNN
-     * @return Vector of (rectangle, confidence) pairs
-     */
+    // Merge detections from Haar cascade and DNN to produce confidence-scored candidates.
+    // Strategy:
+    //   1. If both detectors agree (high IoU), boost confidence to fusion_base_confidence
+    //   2. If only Haar detects, assign haar_only_confidence
+    //   3. If only DNN detects, assign dnn_only_confidence
+    // Returns vector of (rectangle, confidence_score) pairs for downstream filtering.
     static std::vector<std::pair<cv::Rect, double>> fuseDetections(
         const std::vector<cv::Rect>& haarFaces,
         const std::vector<cv::Rect>& dnnFaces
