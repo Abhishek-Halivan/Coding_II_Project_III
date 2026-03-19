@@ -4,6 +4,7 @@
 #include "DnnFaceDetector.h"
 #include "EdgeDetector.h"
 #include <opencv2/core.hpp>
+#include <opencv2/dnn.hpp>
 #include <vector>
 #include <string>
 
@@ -72,5 +73,18 @@ private:
     // Process keyboard input from OpenCV window.
     // Returns false if user pressed q or Esc (quit signal), true otherwise.
     // 'e' key toggles edge preview window visibility.
+    // 'r' key records the largest face on screen to bypass blurring.
     bool handleInput();
+
+    // Face recognition components for selective blurring
+    cv::dnn::Net recognizerNet;
+    cv::Mat myFaceEmbedding;
+    bool isMyFaceRecorded = false;
+    bool requestRecordFace = false;
+
+    // Generates a 128-d embedding from a face crop using OpenFace DNN
+    cv::Mat getFaceEmbedding(const cv::Mat& frame, const cv::Rect& faceRect);
+    
+    // Calculates L2 distance between two face embeddings
+    double compareFaces(const cv::Mat& emb1, const cv::Mat& emb2);
 };

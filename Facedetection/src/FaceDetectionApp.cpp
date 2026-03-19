@@ -16,8 +16,15 @@ bool FaceDetectionApp::initialize(const std::string& cascadePath) {
 
     dnnDetector.loadAuto();
 
+    try {
+        recognizerNet = cv::dnn::readNetFromTorch("openface.nn4.small2.v1.t7");
+    } catch (...) {
+        std::cerr << "Could not load openface.nn4.small2.v1.t7. Face recording disabled.\n";
+    }
+
     std::cout << "Press 'q' or ESC to quit.\n";
     std::cout << "Press 'e' to toggle edge preview window.\n";
+    std::cout << "Press 'r' to record your face to exclude it from blurring.\n";
 
     return true;
 }
@@ -142,12 +149,69 @@ std::vector<cv::Rect> FaceDetectionApp::applyTemporalSmoothing(const std::vector
 }
 
 void FaceDetectionApp::drawDetections(cv::Mat& frame, const std::vector<cv::Rect>& faces, const cv::Mat& edges) {
-    for (const auto& face : faces) {
-        // Draw edge overlay
-        frame(face).setTo(cv::Scalar(0, 255, 255), edges(face));
-        // Draw rectangle border
-        cv::rectangle(frame, face, cv::Scalar(0, 255, 0), 2);
+    if (requestRecordFace && !faces.empty()) {
+        cv::Rect largestFace = faces[0];
+        for (const auto& f : faces) {
+            if (f.area() > largestFace.area()) largestFace = f;
+        }
+        myFaceEmbedding = getFaceEmbedding(frame, largestFace);
+        if (!myFaceEmbedding.empty()) {
+            isMyFaceRecorded = true;
+            std::cout << "Face recorded successfully! Your face will no longer be blurred.\n";
+        }
+        requestRecordFace = false;
     }
+
+    for (const auto& face : faces) {
+        // Ensure the ROI is strictly within the frame boundaries to prevent crashes
+        cv::Rect safeFace = face & cv::Rect(0, 0, frame.cols, frame.rows);
+        if (safeFace.area() <= 0) continue;
+
+        bool isMe = false;
+        if (isMyFaceRecorded) {
+            cv::Mat currentEmbedding = getFaceEmbedding(frame, safeFace);
+            double distance = compareFaces(myFaceEmbedding, currentEmbedding);
+            // OpenFace typical threshold for the same person is an L2 distance < 0.8
+            if (distance < 0.8) {
+                isMe = true;
+            }
+        }
+
+        if (isMe) {
+            // Draw a subtle green border for the recorded user instead of blurring
+            cv::rectangle(frame, safeFace, cv::Scalar(0, 255, 0), 2);
+        } else {
+            // Extract the Region of Interest (ROI)
+            cv::Mat roi = frame(safeFace);
+
+            // Calculate a strong blur kernel size based on face size (must be an odd number)
+            int kernelSize = safeFace.width / 5;
+            if (kernelSize % 2 == 0) kernelSize++; // Make sure it is odd
+            if (kernelSize < 3) kernelSize = 3;    // Minimum viable kernel size for GaussianBlur
+
+            // Apply OpenCV Gaussian Blur directly to the cropped Region of Interest
+            cv::GaussianBlur(roi, roi, cv::Size(kernelSize, kernelSize), 0);
+        }
+    }
+}
+
+cv::Mat FaceDetectionApp::getFaceEmbedding(const cv::Mat& frame, const cv::Rect& faceRect) {
+    if (recognizerNet.empty()) return cv::Mat();
+
+    cv::Rect safeFace = faceRect & cv::Rect(0, 0, frame.cols, frame.rows);
+    if (safeFace.area() <= 0) return cv::Mat();
+
+    cv::Mat faceCropped = frame(safeFace);
+    // OpenFace expects 96x96 RGB image, scaling pixels to 0-1
+    cv::Mat blob = cv::dnn::blobFromImage(faceCropped, 1.0/255.0, cv::Size(96, 96), cv::Scalar(0,0,0), true, false);
+    recognizerNet.setInput(blob);
+    return recognizerNet.forward().clone();
+}
+
+double FaceDetectionApp::compareFaces(const cv::Mat& emb1, const cv::Mat& emb2) {
+    if (emb1.empty() || emb2.empty()) return 1.0;
+    // Euclidian distance between the two 128-d vectors
+    return cv::norm(emb1, emb2, cv::NORM_L2);
 }
 
 bool FaceDetectionApp::handleInput() {
@@ -157,6 +221,9 @@ bool FaceDetectionApp::handleInput() {
     }
     if (key == 'e' || key == 'E') {
         showEdgeWindow = !showEdgeWindow;
+    }
+    if (key == 'r' || key == 'R') {
+        requestRecordFace = true;
     }
     return true;
 }

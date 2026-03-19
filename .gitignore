@@ -1,1 +1,8 @@
 Facedetection/build/**
+*.pb
+*.pbtxt
+*.t7
+*.caffemodel
+*.onnx
+.vs/
+out/
