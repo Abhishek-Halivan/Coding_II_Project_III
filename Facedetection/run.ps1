@@ -40,6 +40,19 @@ if (-not (Test-Path $exePath)) {
     }
 }
 
+$dnnPbUrl = "https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20180220_uint8/opencv_face_detector_uint8.pb"
+$dnnPbtxtUrl = "https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/opencv_face_detector.pbtxt"
+
+if (-not (Test-Path "$projectRoot\opencv_face_detector_uint8.pb")) {
+    Write-Host "Downloading OpenCV DNN face detector weights (~2.6 MB)..."
+    Invoke-WebRequest -Uri $dnnPbUrl -OutFile "$projectRoot\opencv_face_detector_uint8.pb"
+}
+
+if (-not (Test-Path "$projectRoot\opencv_face_detector_uint8.pbtxt")) {
+    Write-Host "Downloading OpenCV DNN face detector config..."
+    Invoke-WebRequest -Uri $dnnPbtxtUrl -OutFile "$projectRoot\opencv_face_detector_uint8.pbtxt"
+}
+
 if ($vcpkgRoot) {
     $vcpkgBin = Join-Path $vcpkgRoot "installed\x64-windows\bin"
     if (Test-Path $vcpkgBin) {

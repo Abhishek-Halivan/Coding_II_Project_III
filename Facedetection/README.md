@@ -1,6 +1,6 @@
 # Real-time Face Detection Application
 
-A modern C++ face detection system that captures video from your webcam and detects faces in real-time using a hybrid approach combining classical and deep learning methods. Built with OpenCV and optimized for smooth, responsive performance.
+A modern C++ face detection system that serves as a real-time **Privacy Anonymizer**. It captures video from your webcam, detects faces using a hybrid approach (classical and deep learning methods), and automatically applies a dynamic Gaussian blur rather than drawing simple rectangles to protect identities. Built with OpenCV and optimized for smooth, responsive performance.
 
 ## Key Features
 
@@ -9,10 +9,12 @@ A modern C++ face detection system that captures video from your webcam and dete
 - **Intelligent Fusion**: Merges detections from both methods using Intersection-over-Union (IoU) overlap for robust results
 - **Confidence-aware Filtering**: Applies stricter validation to lower-confidence detections to reduce false positives
 
-### Visual Enhancements
+### Visual Enhancements & Features
+- **Selective Blurring (Face Recognition)**: Uses a specialized OpenFace deep learning model to extract 128-dimensional facial embeddings. Allows users to record their face to selectively bypass the blur filter via real-time Euclidean distance matching.
+- **Privacy Anonymization (Auto-Blur)**: Automatically applies a heavy Gaussian blur to the face's Region of Interest (ROI), dynamically scaling kernel size based on how close the subject is to the camera to ensure identity protection.
 - **CLAHE Contrast Enhancement**: Adapts image contrast locally for improved detection in challenging lighting (low-light, bright, high-contrast scenes)
 - **Edge-based Validation**: Uses edge density analysis to filter detections and reject non-face regions
-- **Real-time Edge Overlay**: Visualizes detected edges on faces; optional edge preview window for monitoring detector behavior
+- **Edge Preview**: Optional edge preview window available to monitor and debug detector behavior
 
 ### Stability & Smoothness
 - **Temporal Smoothing**: Reduces flickering and jitter by smoothing detection box positions across frames
@@ -133,4 +135,5 @@ $env:OPENCV_FACE_CASCADE = "C:\path\to\haarcascade_frontalface_default.xml"
 ### Controls
 
 - **q** or **Esc**: Quit application
+- **r**: Record the largest face currently on the screen. The application will remember this face and stop blurring it!
 - **e**: Toggle edge detection preview window (useful for debugging detection quality)
